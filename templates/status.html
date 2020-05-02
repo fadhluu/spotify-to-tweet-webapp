@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <img src="static/cover_art.png" height="128" width="128" id="cover_art">
+    <h1 id="track_info"></h1>
+    Tweeting Status: <p id="tweeting_status">status</p>
+    <button onclick="changeTweetingStatus()">Change Status</button>
+</body>
+<script>
+    function changeTweetingStatus() {
+        $.ajax({
+            url: "/get_info",
+            type: "post",
+            success: function (response) {
+                $("#tweeting_status").text(response.is_tweet);
+            }
+        })
+    }
+
+    function get_track_info() {
+        $.ajax({
+            url: "/get_info",
+            type: "get",
+            success: function (response) {
+                $("#track_info").text(response.current_track + " - " + response.current_artist);
+                $("#cover_art").attr("src", response.cover_art);
+            }
+        })
+    };
+    setInterval(function () {
+        get_track_info();
+    }, 3000);
+</script>
+
+</html>
